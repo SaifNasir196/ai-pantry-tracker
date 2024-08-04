@@ -30,8 +30,6 @@ export async function getUserPantries() {
     const { userId } = auth();
     if (!userId) return { error: 'User not authenticated' };
 
-
-
     const pantriesQuery = query(collection(db, 'pantries'), where('userId', '==', userId));
     const pantriesSnapshot = await getDocs(pantriesQuery);
 
