@@ -9,8 +9,7 @@ import { uploadBytes, getDownloadURL, ref, deleteObject } from 'firebase/storage
 
 // Create a new pantry
 export async function createPantry(formData) {
-    // const { userId } = auth();
-    const userId = null;
+    const { userId } = auth();
     if (!userId) return { error: 'User not authenticated' };
 
     const name = formData.get('name');
@@ -58,6 +57,7 @@ export async function deletePantry({ pantryId }) {
 
 // Add an item to a pantry
 export async function addItemToPantry(formData) {
+    console.log('in func');
 
     const { userId } = auth();
     if (!userId) return { error: 'User not authenticated' };
@@ -147,7 +147,7 @@ export async function deletePantryItem(formData) {
 export async function updatePantryItem(formData) {
     const { userId } = auth();
     if (!userId) return { error: 'User not authenticated' };
-    console.log('formData', formData);
+    console.log('formData in uopdate', formData);
 
     const pantryId = formData.get("pantryId")
     const itemId = formData.get("itemId")
@@ -181,7 +181,8 @@ export async function updatePantryItem(formData) {
         };
 
         const newImage = formData.get('image');
-        if (newImage) {
+        console.log('newImage', newImage);
+        if (newImage.size) {
             // Delete old image if it exists
             if (currentItemData.image) {
                 const oldImageRef = ref(storage, currentItemData.image);

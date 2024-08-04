@@ -96,8 +96,6 @@ function DataTable() {
         },
     })
 
-    
-
     const handleSubmit = async (event) => {
         const formData = new FormData(formRef.current);
         console.log('form data', formData);
@@ -244,13 +242,13 @@ function DataTable() {
                 <Dialog>
                 <DialogTrigger asChild>
                     <Button variant="secondary" className="w-fit" disabled={!selectedPantry}>
-                        <CameraIcon className="w-6 h-6" />
+                        <CameraIcon  className="w-6 h-6" />
                     </Button>
                 </DialogTrigger>
 
                 <DialogContent className="w-fit h-fit">
                     <DialogDescription>
-                        <CameraDialog />
+                        <CameraDialog selectedPantry={selectedPantry} />
                     
                     </DialogDescription>
                 </DialogContent>
@@ -266,7 +264,7 @@ function DataTable() {
                 <DialogContent className="w-96">
                     <DialogHeader>
                     <DialogTitle>Add item</DialogTitle>
-                    <DialogDescription>
+                    </DialogHeader>
                         <form action={handleSubmit} ref={formRef}>
                             <div className="flex flex-col gap-2 mt-4">
                                 <Input placeholder="Name" name="name" />
@@ -280,8 +278,6 @@ function DataTable() {
                                 <Button type="submit">Add</Button>
                             </div>
                         </form>
-                    </DialogDescription>
-                    </DialogHeader>
                 </DialogContent>
                 </Dialog>
 

@@ -42,7 +42,8 @@ const createColumns = (pantryId) => [
 
   },
   {
-    accessorKey: "quantity",
+    accessorFn: (row) => `${row.quantity} ${row.unit}`,
+    id: "quantity",
     header: ({ column }) => {
       return (
         <Button
@@ -55,13 +56,9 @@ const createColumns = (pantryId) => [
       )
     },
     cell: ({ row }) => {
-      return <div className="">{row.getValue("quantity") + " "+ row.getValue("unit")} </div>
+      return <div className="text-left">{row.getValue("quantity")} </div>
     }
 
-  },
-  {
-    accessorKey: "unit",
-    header: "Unit",
   },
   {
     accessorKey: "expirationDate",
@@ -84,6 +81,7 @@ const createColumns = (pantryId) => [
         formData.append('pantryId', pantryId);
         formData.append('itemId', row.original.id);
         updatePantryItem(formData);
+        queryClient.invalidateQueries(['pantryItems', pantryId])
     };
  
       return (
