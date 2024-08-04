@@ -126,7 +126,7 @@ const createColumns = (pantryId) => [
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>{row.original.name}</DialogTitle>
-                <DialogDescription>
+              </DialogHeader>
                   <form ref={formRef} action={handleSubmit}>
                     <div className="flex flex-col gap-2 mt-4">
                       <Input placeholder="Name" name="name" defaultValue={row.original.name}/>
@@ -143,8 +143,6 @@ const createColumns = (pantryId) => [
                       <Button type="submit">Update</Button>
                     </div>
                   </form>
-                </DialogDescription>
-              </DialogHeader>
             </DialogContent>
           </Dialog>
         </>

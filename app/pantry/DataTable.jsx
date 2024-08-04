@@ -216,10 +216,7 @@ function DataTable() {
                 <DialogContent className="w-[250rem]">
                     <DialogHeader>
                     <DialogTitle>Generate Recipes</DialogTitle>
-                    <DialogDescription>
-                    {/* <Button variant="secondary" className="w-fit" disabled={!selectedPantry || isGenerating} >
-                        Generate recipes
-                    </Button> */}
+                    </DialogHeader>
                         <form>
                             <ScrollArea className="flex flex-col gap-2 mt-4 h-[400px] ">
                                 {isGenerating ? (
@@ -234,8 +231,6 @@ function DataTable() {
                                 
                             </ScrollArea>
                         </form>
-                    </DialogDescription>
-                    </DialogHeader>
                 </DialogContent>
                 </Dialog>
 
@@ -247,10 +242,12 @@ function DataTable() {
                 </DialogTrigger>
 
                 <DialogContent className="w-fit h-fit">
-                    <DialogDescription>
+                    <DialogHeader>
+                        <DialogTitle>
                         <CameraDialog selectedPantry={selectedPantry} />
+                        </DialogTitle>
                     
-                    </DialogDescription>
+                    </DialogHeader>
                 </DialogContent>
                 </Dialog>
 
