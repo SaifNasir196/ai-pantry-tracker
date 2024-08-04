@@ -63,7 +63,28 @@ const createColumns = (pantryId) => [
   {
     accessorKey: "expirationDate",
     header: "Expiration",
+    cell: ({ row }) => {
+      const timestamp = row.original.expirationDate;
+      if (timestamp && typeof timestamp.seconds === 'number') {
+        // Convert Firestore Timestamp to JavaScript Date
+        const date = new Date(timestamp.seconds * 1000);
+        
+        // Format the date
+        const formattedDate = date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        });
+        
+        return <div>{formattedDate}</div>;
+      } else {
+        // If it's not a valid timestamp, return a placeholder or the original value
+        return <div>{'N/A'}</div>;
+      }
+
+    }
   },
+
   {
     id: "actions",
     cell: ({ row }) => {
