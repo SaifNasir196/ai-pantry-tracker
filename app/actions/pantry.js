@@ -9,8 +9,9 @@ import { uploadBytes, getDownloadURL, ref, deleteObject } from 'firebase/storage
 
 // Create a new pantry
 export async function createPantry(formData) {
-    const { userId } = auth();
-    if (!userId) throw new Error('User not authenticated');
+    // const { userId } = auth();
+    const userId = null;
+    if (!userId) return { error: 'User not authenticated' };
 
     const name = formData.get('name');
     try {
@@ -28,7 +29,7 @@ export async function createPantry(formData) {
 // Get all pantries for a user
 export async function getUserPantries() {
     const { userId } = auth();
-    if (!userId) throw new Error('User not authenticated');
+    if (!userId) return { error: 'User not authenticated' };
 
 
 
@@ -43,13 +44,13 @@ export async function getUserPantries() {
 
 export async function deletePantry({ pantryId }) {
     const { userId } = auth();
-    if (!userId) throw new Error('User not authenticated');
+    if (!userId) return { error: 'User not authenticated' };
 
     const pantryRef = doc(db, 'pantries', pantryId);
     const pantryDoc = await getDoc(pantryRef);
 
     if (!pantryDoc.exists() || pantryDoc.data()?.userId !== userId) {
-        throw new Error('Pantry not found or access denied');
+        return new Error('Pantry not found or access denied');
     }
 
     await deleteDoc(pantryRef);
@@ -59,7 +60,7 @@ export async function deletePantry({ pantryId }) {
 export async function addItemToPantry(formData) {
 
     const { userId } = auth();
-    if (!userId) throw new Error('User not authenticated');
+    if (!userId) return { error: 'User not authenticated' };
 
     console.log('formData', formData);
     const pantryId = formData.get('pantryId');
@@ -74,7 +75,7 @@ export async function addItemToPantry(formData) {
     const pantryDoc = await getDoc(pantryRef);
 
     if (!pantryDoc.exists() || pantryDoc.data()?.userId !== userId) {
-        throw new Error('Pantry not found or access denied');
+        return ('Pantry not found or access denied');
     }
 
     let imageUrl = null;
@@ -99,19 +100,19 @@ export async function addItemToPantry(formData) {
 // Get all items in a pantry
 export async function getPantryItems(formData) {
     const { userId } = auth();
-    if (!userId) throw new Error('User not authenticated');
+    if (!userId) return { error: 'User not authenticated' };
 
     const pantryId = formData.pantryId;
 
     if (!pantryId) {
-        return new Error('Pantry ID is required to get items');
+        return { error: 'Pantry ID is required to get items' };
     };
 
     const pantryRef = doc(db, 'pantries', pantryId);
     const pantryDoc = await getDoc(pantryRef);
 
     if (!pantryDoc.exists() || pantryDoc.data()?.userId !== userId) {
-        throw new Error('Pantry not found or access denied');
+        return { error: 'Pantry not found or access denied' };
     }
 
     const itemsSnapshot = await getDocs(collection(db, 'pantries', pantryId, 'items'));
@@ -126,7 +127,7 @@ export async function getPantryItems(formData) {
 // Delete an item from a pantry
 export async function deletePantryItem(formData) {
     const { userId } = auth();
-    if (!userId) throw new Error('User not authenticated');
+    if (!userId) return { error: 'User not authenticated' };
 
     console.log('formData', formData);
 
@@ -136,7 +137,7 @@ export async function deletePantryItem(formData) {
     const pantryDoc = await getDoc(pantryRef);
 
     if (!pantryDoc.exists() || pantryDoc.data()?.userId !== userId) {
-        throw new Error('Pantry not found or access denied');
+        return { error: 'Pantry not found or access denied' };
     }
 
     await deleteDoc(doc(db, 'pantries', pantryId, 'items', itemId));
@@ -145,7 +146,7 @@ export async function deletePantryItem(formData) {
 // Update an item in a pantry
 export async function updatePantryItem(formData) {
     const { userId } = auth();
-    if (!userId) throw new Error('User not authenticated');
+    if (!userId) return { error: 'User not authenticated' };
     console.log('formData', formData);
 
     const pantryId = formData.get("pantryId")
@@ -154,20 +155,20 @@ export async function updatePantryItem(formData) {
 
     try {
         if (!pantryId || !itemId) {
-            throw new Error('PantryId and ItemId are required');
+            return { error: 'PantryId and ItemId are required' };
         }
 
         const pantryRef = doc(db, 'pantries', pantryId);
         const pantryDoc = await getDoc(pantryRef);
 
         if (!pantryDoc.exists() || pantryDoc.data()?.userId !== userId) {
-            throw new Error('Pantry not found or access denied');
+            return { error: 'Pantry not found or access denied' };
         }
 
         const itemRef = doc(db, 'pantries', pantryId, 'items', itemId);
         const itemDoc = await getDoc(itemRef);
         if (!itemDoc.exists()) {
-            throw new Error('Item not found');
+            return { error: 'Item not found' };
         }
 
         const currentItemData = itemDoc.data();
