@@ -37,16 +37,21 @@ const page = () => {
 
   return (
     <div className='mt-20  mx-56 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 sm: gap-6 transition-all'>
-      {pantries && pantries.map((pantry) => {
-        return isLoading ? (
-          <Skeleton className="w-10 h-5" />
-        ) : (
+      {pantries && pantries.length !== 0 ? pantries.map((pantry) => {
+        return (
           <div key={pantry.id} className="p-6 border rounded-lg shadow-md">
             <h2 className="text-xl font-bold">{pantry.name}</h2>
             <Button onClick={() => (deleteFunc({ pantryId: pantry.id }))} variant="secondary" className="mt-2 cursor-pointer">Delete</Button>
           </div>
         )
-      })}
+      }) : (
+
+        <div className="text-center col-span-full">
+          <h2 className="text-xl font-bold">No Pantries Found</h2>
+          <h2 className="text-2xl font-bold">Create new pantry to add items.</h2>
+        </div>
+        
+      )}
     </div>
   )
 }
