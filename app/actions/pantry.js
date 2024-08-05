@@ -78,9 +78,9 @@ export async function addItemToPantry(formData) {
 
     let imageUrl = null;
     if (image) {
-        const imageRef = ref(storage, `items/${Date.now()}.jpg`);
-        await uploadBytes(imageRef, image)
-        imageUrl = await getDownloadURL(imageRef);
+        const imageRef = ref(storage, `items/${Date.now()}.jpg`); // create reference to firebase storage
+        await uploadBytes(imageRef, image) // add image to the reference
+        imageUrl = await getDownloadURL(imageRef); // get the download URL of the image
     }
 
     const itemRef = await addDoc(collection(db, 'pantries', pantryId, 'items'), {
@@ -174,7 +174,7 @@ export async function updatePantryItem(formData) {
             name: formData.get("name"),
             quantity: Number(formData.get("quantity")),
             unit: formData.get("unit"),
-            expirationDate: formData.get("expirationDate") ? new Date(formData.get("expirationDate")) : null,
+            expirationDate: formData.get("expirationDate") ? new Date(formData.get("expirationDate")) : currentItemData.expirationDate,
             notes: formData.get("notes"),
         };
 

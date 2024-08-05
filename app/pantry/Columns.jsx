@@ -1,5 +1,4 @@
 "use client"
-
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -90,6 +89,7 @@ const createColumns = (pantryId) => [
     cell: ({ row }) => {
       const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
       const formRef = useRef();
+      const [isLoading, setIsLoading] = useState(false);
 
       const queryClient = useQueryClient();
       const handleDelete = async () => {
@@ -98,11 +98,14 @@ const createColumns = (pantryId) => [
       }
 
       const handleSubmit = async (event) => {
+        setIsLoading(true);
+        console.log('isloading', isLoading);
         const formData = new FormData(formRef.current);
         formData.append('pantryId', pantryId);
         formData.append('itemId', row.original.id);
         updatePantryItem(formData);
         queryClient.invalidateQueries(['pantryItems', pantryId])
+        setIsLoading(false);
     };
  
       return (
@@ -140,7 +143,8 @@ const createColumns = (pantryId) => [
                       {
                         row.original.image && <img src={row.original.image} width={400} height={400} />
                       }
-                      <Button type="submit">Update</Button>
+                      <Button type="submit" disabled={isLoading}> { isLoading ? "Updating" : "Update"}</Button>
+                      {isLoading}
                     </div>
                   </form>
             </DialogContent>
