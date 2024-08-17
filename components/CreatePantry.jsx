@@ -12,27 +12,30 @@ import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { createPantry } from '@/app/actions/pantry'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Loader2 } from 'lucide-react'
 
 const CreatePantry = () => {
+  const [open, setOpen] = React.useState(false);
   const queryClient = useQueryClient();
 
-  const {mutate: addPantry} = useMutation({
+  const {mutate: addPantry, isPending} = useMutation({
     mutationFn: async (formData) => {
-      createPantry(formData);
+      await createPantry(formData);
+      setOpen(false);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['userPantries'])
     },
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     addPantry(formData);
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger asChild>
         <Button>
          <span className='text-2xl font-medium mr-2 mb-1'>+</span> Create Pantry
@@ -46,7 +49,9 @@ const CreatePantry = () => {
                 <div className="flex flex-col gap-2 mt-5">
                     <Label htmlFor="name">Pantry Name</Label>
                     <Input name="name" label="name" placeholder="Pantry Name" />
-                    <Button type="submit" >Submit</Button>
+                    <Button disabled={isPending} type="submit">
+                        {isPending ? (<><Loader2 className='animate-spin' />Creating...</>) : 'Create'}
+                    </Button>
                 </div>
             </form>
             
