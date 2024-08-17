@@ -44,7 +44,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { getUserPantries, getPantryItems, addItemToPantry } from "@/app/actions/pantry"
 import createColumns from "./Columns"
-import { Camera, CameraIcon } from "lucide-react"
+import { CameraIcon, Loader2Icon } from "lucide-react"
 
 
 
@@ -86,7 +86,7 @@ function DataTable() {
         [items]
     );
 
-    const {mutate: addItem} = useMutation({
+    const {mutate: addItem, isPending: addPending} = useMutation({
         mutationFn: async (formData) => {
             formData.append('pantryId', selectedPantry);
             await addItemToPantry(formData);
@@ -272,7 +272,9 @@ function DataTable() {
                                 <Input placeholder="Expiration Date" type="date" name="expirationDate" />
                                 <Input type="file" name="image" />
                                 <Textarea placeholder="Notes" name="notes" />
-                                <Button type="submit">Add</Button>
+                                <Button type="submit" disabled={addPending}>
+                                    {addPending ? <Loader2Icon className="animate-spin"/> : "Add"}
+                                </Button>
                             </div>
                         </form>
                 </DialogContent>

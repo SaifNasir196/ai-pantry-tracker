@@ -18,7 +18,7 @@ const PantryItem = ({ pantry }) => {
     })
 
     return (
-        <div className="p-6 border rounded-lg shadow-md">
+        <div className="p-6 border rounded-lg shadow-md w-96 flex flex-col justify-between h-44">
             <h2 className="text-xl font-bold">{pantry.name}</h2>
             <Button disabled={deletePending} onClick={deleteFunc} variant="secondary" className="mt-2 cursor-pointer w-1/5">
                 {deletePending ? <Loader2Icon className='animate-spin' /> : 'Delete'}
